@@ -1,1 +1,1 @@
-sudo docker rmi 8d06d94ad11a
+sudo docker rmi -f 0428fd34e335
