@@ -1,0 +1,8 @@
+Quick Start with Docker 
+Step 1: Pull the Open WebUI Image
+docker pull ghcr.io/open-webui/open-webui:main
+Step 2: Run the Container
+docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+Using GPU Support  使用 GPU 支持
+docker run -d -p 3000:8080 --gpus all -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:cuda
+
