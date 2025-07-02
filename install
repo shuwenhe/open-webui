@@ -1,21 +1,140 @@
-https://docs.openwebui.com/getting-started/quick-start/
+步骤 1: 安装必要的系统依赖
+sudo apt update
+sudo apt install -y python3.11 python3.11-venv git curl build-essential
+# 安装 Node.js (推荐使用 nvm 管理 Node.js 版本)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+source ~/.bashrc # 或 ~/.zshrc
+nvm install node # 安装最新LTS版本
+nvm use node
 
-1.Stop and remove the current container:
-停止并删除当前容器：
-sudo docker rm -f open-webui
+步骤 2: 克隆 Open WebUI 源代码
+git clone https://github.com/open-webui/open-webui.git
+cd open-webui
 
-2.Pull the latest version:
-拉取最新版本：
-sudo ocker pull ghcr.io/open-webui/open-webui:main
+步骤 3: 创建并激活 Python 虚拟环境
+python3.11 -m venv venv
+source venv/bin/activate
 
-3.Start the container again:
-再次启动容器：
-sudo docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+步骤 4: 安装后端 Python 依赖
+pip install -r requirements.txt
 
-https://docs.openwebui.com/getting-started/quick-start/starting-with-ollama/
-https://docs.openwebui.com/troubleshooting/connection-error/
-https://github.com/ollama/ollama/blob/main/docs/faq.md#setting-environment-variables-on-linux
-Setting environment variables on Linux
-在 Linux 上设置环境变量
-sudo systemctl edit ollama.service
+步骤 5: 构建前端
+npm install # 或 yarn install
+npm run build # 或 yarn build
+
+步骤 6: 启动 Open WebUI
+python -m openwebui serve
+监听所有网络接口
+export OPENWEBUI_HOST=0.0.0.0
+python -m openwebui serve
+
+步骤 7: 访问 Open WebUI
+浏览器中访问 http://localhost:8080 
+
+步骤 8：配置为 Systemd 服务
+1.退出虚拟环境：
+deactivate
+2.创建服务文件：
+sudo vi /etc/systemd/system/openwebui.service
+3.粘贴以下内容到文件中：
+[Unit]
+Description=Open WebUI Service
+After=network.target
+
+[Service]
+Type=simple
+User=<您的用户名>
+Group=<您的用户名>
+WorkingDirectory=/path/to/your/open-webui
+ExecStart=/path/to/your/open-webui/venv/bin/python -m openwebui serve
+Restart=on-failure
+Environment="OPENWEBUI_HOST=0.0.0.0" # 可选：如果希望广泛监听
+
+[Install]
+WantedBy=multi-user.target
+
+
+[Unit]
+Description=Open WebUI Service
+After=network.target
+
+[Service]
+Type=simple
+User=<您的用户名>
+Group=<您的用户名>
+WorkingDirectory=/path/to/your/open-webui
+ExecStart=/path/to/your/open-webui/venv/bin/python -m openwebui serve
+Restart=on-failure
+Environment="OPENWEBUI_HOST=0.0.0.0" # 可选：如果希望广泛监听
+
+[Install]
+WantedBy=multi-user.target
+
+
+[Unit]
+Description=Open WebUI Service
+After=network.target
+
+[Service]
+Type=simple
+User=<您的用户名>
+Group=<您的用户名>
+WorkingDirectory=/path/to/your/open-webui
+ExecStart=/path/to/your/open-webui/venv/bin/python -m openwebui serve
+Restart=on-failure
+Environment="OPENWEBUI_HOST=0.0.0.0" # 可选：如果希望广泛监听
+
+[Install]
+WantedBy=multi-user.target
+
+
+[Unit]
+Description=Open WebUI Service
+After=network.target
+
+[Service]
+Type=simple
+User=<您的用户名>
+Group=<您的用户名>
+WorkingDirectory=/path/to/your/open-webui
+ExecStart=/path/to/your/open-webui/venv/bin/python -m openwebui serve
+Restart=on-failure
+Environment="OPENWEBUI_HOST=0.0.0.0" # 可选：如果希望广泛监听
+
+[Install]
+WantedBy=multi-user.target
+
+
+[Unit]
+Description=Open WebUI Service
+After=network.target
+
+[Service]
+Type=simple
+User=<您的用户名>
+Group=<您的用户名>
+WorkingDirectory=/path/to/your/open-webui
+ExecStart=/path/to/your/open-webui/venv/bin/python -m openwebui serve
+Restart=on-failure
+Environment="OPENWEBUI_HOST=0.0.0.0" # 可选：如果希望广泛监听
+
+[Install]
+WantedBy=multi-user.target
+
+4.重新加载 systemd 配置
+sudo systemctl daemon-reload
+
+5.启用服务并启动
+sudo systemctl enable openwebui.service
+sudo systemctl start openwebui.service
+
+6.检查服务状态：
+sudo systemctl status openwebui.service
+
+7.防火墙设置
+ Linux 服务器启用了防火墙（如 ufw 或 firewalld），需要允许外部访问 Open WebUI 使用的端口 8080
+sudo ufw allow 8080/tcp
+sudo ufw reload # 如果防火墙已启用
+
+
 
